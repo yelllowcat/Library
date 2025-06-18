@@ -23,10 +23,10 @@ function Book(id, title, author, nPages, readed = false) {
   };
 }
 
-function addBookToLibrary(title, author, nPages) {
+function addBookToLibrary(title, author, nPages, readed = false) {
   let id = crypto.randomUUID();
 
-  const book = new Book(id, title, author, nPages, false);
+  const book = new Book(id, title, author, nPages, readed);
   myLibrary.push(book);
 }
 
@@ -40,7 +40,6 @@ Book.prototype.madeBy = function () {
   return `Book made by ${this.author}.`;
 };
 
-console.log();
 addBookToLibrary("Atomic Habits", "James Clear", 10);
 addBookToLibrary("The Power of Now", "Eckhart Tolle", 15);
 addBookToLibrary("Deep Work", "Cal Newport", 12);
@@ -81,12 +80,104 @@ function getRandomInt(max) {
 }
 const container = document.querySelector(".container");
 myLibrary.forEach((element) => {
-  let divs = document.createElement("div");
-  divs.style.width = "22vh";
-  divs.style.height = "22vh";
-  divs.style.textAlign = "center";
-  let color = changeColor();
-  divs.style.background = color;
-  divs.innerHTML = element.title;
-  container.appendChild(divs);
+  const template = document.getElementById("book-template");
+  const clone = template.content.cloneNode(true);
+
+  const card = clone.querySelector(".book-card");
+  const title = clone.querySelector(".book-title");
+  const author = clone.querySelector(".book-author");
+  const pages = clone.querySelector(".book-pages");
+  const del_button = clone.querySelector(".remove-btn");
+  const status_button = clone.querySelector(".status-btn");
+
+  card.style.background = changeColor();
+  title.textContent = element.title;
+  author.textContent = `By: ${element.author}`;
+  pages.textContent = `${element.nPages} pages`;
+
+  del_button.addEventListener("click", () => {
+    card.remove();
+  });
+  status_button.addEventListener("click", () => {
+    if (!element.readed) {
+      status_button.style.background = "#22c55e";
+      status_button.textContent = "Completed";
+      element.readed = true;
+    } else {
+      status_button.style.background = "gray";
+      element.readed = false;
+      status_button.textContent = "Read Now";
+    }
+  });
+  container.appendChild(clone);
+});
+
+const dialog = document.querySelector("dialog");
+const newButton = document.querySelector(".new");
+const closeButton = document.querySelector("dialog button");
+const submitButton = document.querySelector(".submit");
+
+const inputTitle = document.querySelector(".title");
+const inputAuthot = document.querySelector(".author");
+const inputNumber = document.querySelector(".number");
+
+newButton.addEventListener("click", () => {
+  dialog.showModal();
+});
+submitButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  const newBook = [
+    inputTitle.value,
+    inputAuthot.value,
+    inputNumber.value,
+    false,
+  ];
+  console.log(newBook);
+  addBookToLibrary(
+    inputTitle.value,
+    inputAuthot.value,
+    inputNumber.value,
+    false
+  );
+  renderSingleBook(newBook);
+  inputTitle.value = "";
+  inputAuthot.value = "";
+  inputNumber.value = "";
+  dialog.close(inputTitle.value);
+});
+
+function renderSingleBook(book) {
+  const template = document.getElementById("book-template");
+  const clone = template.content.cloneNode(true);
+  const del_button = clone.querySelector(".remove-btn");
+  const status_button = clone.querySelector(".status-btn");
+
+  const card = clone.querySelector(".book-card");
+  card.style.background = changeColor();
+  clone.querySelector(".book-title").textContent = book[0];
+  clone.querySelector(".book-author").textContent = `By: ${book[1]}`;
+  clone.querySelector(".book-pages").textContent = `${book[2]} pages`;
+  del_button.addEventListener("click", () => {
+    card.remove();
+  });
+  status_button.addEventListener("click", () => {
+    if (!book[3]) {
+      status_button.style.background = "#22c55e";
+      status_button.textContent = "Completed";
+      book[3] = true;
+    } else {
+      status_button.style.background = "gray";
+      book[3] = false;
+      status_button.textContent = "Read Now";
+    }
+  });
+
+  container.appendChild(clone);
+}
+
+closeButton.addEventListener("click", () => {
+  inputTitle.value = "";
+  inputAuthot.value = "";
+  inputNumber.value = "";
+  dialog.close();
 });
