@@ -1,0 +1,28 @@
+body{
+    
+    display: flex;
+    flex-direction: column;
+}
+h1{
+    align-self: center;
+    font-size: 32px;
+}
+.container{
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.new{
+    align-self: center;
+    height: 6vh;
+    width: 30vh;
+    margin-bottom: 3vh;
+    border-radius: 15px;
+    background-color: #24a0ed;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+}
