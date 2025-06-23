@@ -1,14 +1,14 @@
 const myLibrary = [];
-function Book(id, title, author, nPages, readed = false) {
-  if (!new.target) {
-    throw Error("You must use the 'new' operator to call the constructor");
+class Book {
+  constructor(id, title, author, nPages, readed = false) {
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.nPages = nPages;
+    this.readed = readed;
   }
-  this.id = id;
-  this.title = title;
-  this.author = author;
-  this.nPages = nPages;
-  this.readed = readed;
-  this.info = function () {
+
+  info = function () {
     const s = this.readed ? "readed" : "not read yet";
     return (
       "The " +
@@ -66,8 +66,6 @@ addBookToLibrary(
   16
 );
 
-console.log(myLibrary);
-listBooks();
 function changeColor() {
   let rand1 = getRandomInt(256);
   let rand2 = getRandomInt(256);
