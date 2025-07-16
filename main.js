@@ -124,24 +124,31 @@ newButton.addEventListener("click", () => {
 });
 submitButton.addEventListener("click", (event) => {
   event.preventDefault();
-  const newBook = [
-    inputTitle.value,
-    inputAuthot.value,
-    inputNumber.value,
-    false,
-  ];
-  console.log(newBook);
-  addBookToLibrary(
-    inputTitle.value,
-    inputAuthot.value,
-    inputNumber.value,
-    false
-  );
-  renderSingleBook(newBook);
-  inputTitle.value = "";
-  inputAuthot.value = "";
-  inputNumber.value = "";
-  dialog.close(inputTitle.value);
+
+  if (
+    inputTitle.checkValidity() &&
+    inputAuthot.checkValidity() &&
+    inputNumber.checkValidity()
+  ) {
+    const newBook = [
+      inputTitle.value,
+      inputAuthot.value,
+      inputNumber.value,
+      false,
+    ];
+    console.log(newBook);
+    addBookToLibrary(
+      inputTitle.value,
+      inputAuthot.value,
+      inputNumber.value,
+      false
+    );
+    renderSingleBook(newBook);
+    inputTitle.value = "";
+    inputAuthot.value = "";
+    inputNumber.value = "";
+    dialog.close(inputTitle.value);
+  }
 });
 
 function renderSingleBook(book) {
